@@ -861,7 +861,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             ansible_host = ip_address
 
         self.inventory.set_variable(hostname, "ansible_host", ansible_host)
-        self.inventory.set_variable(hostname, "ansible_port", ansible_port)
+        # Don't set ansible_port if it is null or empty
+        if ansible_port not in (None, ""):
+          self.inventory.set_variable(hostname, "ansible_port", ansible_port)
 
     def _set_composable_vars(self, hostname: str) -> None:
         """
